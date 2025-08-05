@@ -2,8 +2,6 @@ name: Build and Push InstaShare.API to ACR
 
 on:
   push:
-    branches:
-      - main
     paths:
       - 'InstaShare.API/**'
       - '.github/workflows/deploy-api.yml'
