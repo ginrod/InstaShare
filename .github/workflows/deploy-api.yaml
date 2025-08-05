@@ -5,39 +5,58 @@ on:
     branches:
       - main
     paths:
-      - 'api/**'
+      - 'InstaShare.API/**'
       - '.github/workflows/deploy-api.yml'
 
 env:
-  ACR_NAME: instashareacr                
   IMAGE_NAME: instashare-api
-  DOCKER_FOLDER: ./api
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      IMG_NAME_SVC: instashare-api
 
     steps:
-      - name: 🛎️ Checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: 🔐 Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: 📦 Azure Container Registry Login
-        uses: azure/docker-login@v1
-        with:
-          login-server: ${{ env.ACR_NAME }}.azurecr.io
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
-
-      - name: 🐳 Build Docker image
+      - name: Build Docker image
         run: |
-          docker build -t $IMAGE_NAME:${{ github.sha }} $DOCKER_FOLDER
-          docker tag $IMAGE_NAME:${{ github.sha }} $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
+          docker build \
+          -f ./InstaShare.API/InstaShare.API/Dockerfile \
+          -t ${{secrets.INSTA_SHARE_ACR_HOST}}/${IMG_NAME_SVC}:latest \
+          -t ${{secrets.INSTA_SHARE_ACR_HOST}}/${IMG_NAME_SVC}:${GITHUB_SHA::8} \
+          .
 
-      - name: 📤 Push Docker image
+      - name: Discord Notification (build)
+        uses: lazy-actions/slatify@master
+        if: always()
+        with:
+          type: ${{ job.status }}
+          job_name: "*Build docker image*"
+          channel: "#github"
+          url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name: Log in to ACR
+        uses: docker/login-action@v1
+        if: github.ref == 'refs/heads/main'
+        with:
+          registry: ${{ secrets.INSTA_SHARE_ACR_HOST }}
+          username: ${{ secrets.INSTA_SHARE_ACR_USER }}
+          password: ${{ secrets.INSTA_SHARE_ACR_PASSWORD }}
+
+      - name: Push images to ACR
+        if: github.ref == 'refs/heads/main'
         run: |
-          docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
+          docker push ${{secrets.INSTA_SHARE_ACR_HOST}}/${IMG_NAME_SVC}
+          docker push ${{secrets.INSTA_SHARE_ACR_HOST}}/${IMG_NAME_SVC}:${GITHUB_SHA::8}
+
+      - name: Discord Notification (publish)
+        uses: lazy-actions/slatify@master
+        if: github.ref == 'refs/heads/main'
+        with:
+          type: ${{ job.status }}
+          job_name: "*Push docker image*"
+          channel: "#github"
+          url: ${{ secrets.DISCORD_WEBHOOK_URL }}
