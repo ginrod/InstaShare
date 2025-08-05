@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'InstaShare.API/**'
-      - '.github/workflows/deploy-api.yml'
+      - '.github/workflows/deploy-api.yaml'
 
 env:
   IMAGE_NAME: instashare-api
