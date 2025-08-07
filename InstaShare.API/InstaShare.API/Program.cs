@@ -1,24 +1,72 @@
+using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy
+                .WithOrigins(builder.Configuration.GetSection("AllowedHosts").Get<string>()!)
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
+
+builder.Services.AddResponseCompression(options => { options.EnableForHttps = true; });
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Granite Home Api"
+    });
+
+    options.TagActionsBy(api =>
+    {
+        if (api.GroupName != null) return new[] { api.GroupName };
+
+        if (api.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
+            return new[] { controllerActionDescriptor.ControllerName };
+
+        throw new InvalidOperationException("Unable to determine tag for endpoint.");
+    });
+
+    options.DocInclusionPredicate((_, _) => true);
+});
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+})
+    .AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+        options.SubstituteApiVersionInUrl = true;
+    });
+
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+app.UseCors();
 
-app.UseAuthorization();
+app.UseResponseCompression();
 
 app.MapControllers();
 
