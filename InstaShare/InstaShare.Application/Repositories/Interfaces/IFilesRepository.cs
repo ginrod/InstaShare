@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InstaShare.Application.Respositories.Interfaces
+namespace InstaShare.Application.Repositories.Interfaces
 {
     public interface IFilesRepository : IEntitiesRepository<FileEntity, Guid>
     {

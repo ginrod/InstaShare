@@ -13,4 +13,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\InstaShare.Application\InstaShare.Application.csproj" />
+    <ProjectReference Include="..\InstaShare.Infrastructure\InstaShare.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

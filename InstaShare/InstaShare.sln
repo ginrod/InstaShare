@@ -19,10 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InstaShare.Infra", "InstaSh
 		IFilesDataContext.cs = IFilesDataContext.cs
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{1E65A10F-DD62-4896-BDD8-7CA6EB2BBB10}"
-	ProjectSection(SolutionItems) = preProject
-		FilesRepository.cs = FilesRepository.cs
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstaShare.Infrastructure", "InstaShare.Infrastructure\InstaShare.Infrastructure.csproj", "{CD9198B6-A2FB-4B93-B4DF-A4AE88655D22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +39,10 @@ Global
 		{1BD7DBB0-CFED-4541-B1A4-3BB1AE5E4632}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BD7DBB0-CFED-4541-B1A4-3BB1AE5E4632}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BD7DBB0-CFED-4541-B1A4-3BB1AE5E4632}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD9198B6-A2FB-4B93-B4DF-A4AE88655D22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD9198B6-A2FB-4B93-B4DF-A4AE88655D22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD9198B6-A2FB-4B93-B4DF-A4AE88655D22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD9198B6-A2FB-4B93-B4DF-A4AE88655D22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,7 +50,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{09E7D35C-4202-43B1-85E8-7E39E89C0C18} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{1BD7DBB0-CFED-4541-B1A4-3BB1AE5E4632} = {644823F7-EE84-43F9-9EC3-AB6C9670223B}
-		{1E65A10F-DD62-4896-BDD8-7CA6EB2BBB10} = {D29CD7C1-C59A-4315-82BA-EAFCC72A9470}
+		{CD9198B6-A2FB-4B93-B4DF-A4AE88655D22} = {D29CD7C1-C59A-4315-82BA-EAFCC72A9470}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {472DE793-4A96-4AE8-8BAA-5FFC482EC8B3}

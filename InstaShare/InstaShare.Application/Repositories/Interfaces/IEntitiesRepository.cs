@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InstaShare.Application.Respositories.Interfaces
+namespace InstaShare.Application.Repositories.Interfaces
 {
     public interface IEntitiesRepository<TEntity, TKey> where TEntity : Entity<TKey> where TKey : struct
     {

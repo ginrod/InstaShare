@@ -1,7 +1,7 @@
 ﻿using InstaShare.Application.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace InstaShareAdministration.Infrastructure;
+namespace InstaShare.Infrastructure;
 
 public interface IFilesDataContext
 {

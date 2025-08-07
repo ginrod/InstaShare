@@ -1,10 +1,10 @@
-﻿using ContactSystem.Application.Entities;
-using ContactSystem.Infrastructure;
+﻿using InstaShare.Application.Entities;
+using InstaShare.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace ContactAdministrationSystem.Infrastructure;
+namespace InstaShare.Infrastructure;
 
-public class FilesDataContext : DbContext, IGraniteDataContext
+public class FilesDataContext : DbContext, IFilesDataContext
 {
     public FilesDataContext()
     {

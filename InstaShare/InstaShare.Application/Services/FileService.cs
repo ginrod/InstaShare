@@ -1,5 +1,5 @@
 ﻿using InstaShare.Application.Entities;
-using InstaShare.Application.Respositories.Interfaces;
+using InstaShare.Application.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
