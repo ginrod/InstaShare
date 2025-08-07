@@ -1,4 +1,26 @@
+using Asp.Versioning;
+using InstaShare.Infrastructure;
+using InstaShare.Application.Entities;
+using InstaShare.Application.Repositories.Interfaces;
+using InstaShare.Application.Services;
+using InstaShare.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy
+                .WithOrigins(builder.Configuration.GetSection("AllowedHosts").Get<string>()!)
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
 // Add services to the container.
 

@@ -9,10 +9,10 @@ namespace InstaShare.Application.Services.Interfaces
 {
     public interface IFileService
     {
-        Task<FileEntity> GetOfficeByIdAsync(Guid id);
-        Task<IEnumerable<FileEntity>> GetAllOfficesAsync();
-        Task AddOfficeAsync(FileEntity contact);
-        Task UpdateOfficeAsync(FileEntity contact);
-        Task DeleteOfficeAsync(Guid id);
+        Task<FileEntity> GetFileByIdAsync(Guid id);
+        Task<IEnumerable<FileEntity>> GetAllFilesAsync();
+        Task AddFileAsync(FileEntity contact);
+        Task UpdateFileAsync(FileEntity contact);
+        Task DeleteFileAsync(Guid id);
     }
 }
