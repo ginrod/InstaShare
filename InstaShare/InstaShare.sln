@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstaShare.API", "InstaShare.API\InstaShare.API.csproj", "{7A105B5D-464A-47E3-BC97-E8CF381D1327}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InstaShare.Client", "InstaShare.Client", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstaShare.Client", "InstaShare.Client\InstaShare.Client.csproj", "{09E7D35C-4202-43B1-85E8-7E39E89C0C18}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A105B5D-464A-47E3-BC97-E8CF381D1327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A105B5D-464A-47E3-BC97-E8CF381D1327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A105B5D-464A-47E3-BC97-E8CF381D1327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A105B5D-464A-47E3-BC97-E8CF381D1327}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09E7D35C-4202-43B1-85E8-7E39E89C0C18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09E7D35C-4202-43B1-85E8-7E39E89C0C18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09E7D35C-4202-43B1-85E8-7E39E89C0C18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09E7D35C-4202-43B1-85E8-7E39E89C0C18}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{09E7D35C-4202-43B1-85E8-7E39E89C0C18} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {472DE793-4A96-4AE8-8BAA-5FFC482EC8B3}
+	EndGlobalSection
+EndGlobal
