@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstaShare.API", "InstaShare.API\InstaShare.API.csproj", "{7A105B5D-464A-47E3-BC97-E8CF381D1327}"
 EndProject
@@ -14,10 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstaShare.Application", "InstaShare.Application\InstaShare.Application.csproj", "{1BD7DBB0-CFED-4541-B1A4-3BB1AE5E4632}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InstaShare.Infra", "InstaShare.Infra", "{D29CD7C1-C59A-4315-82BA-EAFCC72A9470}"
-	ProjectSection(SolutionItems) = preProject
-		FilesDataContext.cs = FilesDataContext.cs
-		IFilesDataContext.cs = IFilesDataContext.cs
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstaShare.Infrastructure", "InstaShare.Infrastructure\InstaShare.Infrastructure.csproj", "{CD9198B6-A2FB-4B93-B4DF-A4AE88655D22}"
 EndProject
