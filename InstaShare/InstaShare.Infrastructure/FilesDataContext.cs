@@ -35,7 +35,7 @@ public class FilesDataContext : DbContext, IFilesDataContext
     }
 
     // Basic Code to add more sample data
-    // It creates 599 Random Files
+    // It creates 500 Random Files
     public void SeedInitialData()
     {
         var files = new List<FileEntity>();
