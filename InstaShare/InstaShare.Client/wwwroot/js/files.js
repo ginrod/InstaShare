@@ -3,8 +3,19 @@ let currentPage = 1;
 const pageSize = 5;
 
 async function fetchFiles() {
-    const res = await fetch('/Files/getFiles');
-    allFiles = await res.json();
+    const apiResult = await fetch(`${baseUrl}/api/v1/Files/getFiles`);
+
+    if (!apiResult.ok)
+        throw new Error("Failed to fetch offices");
+
+    const allFiles = await apiResult.json();
+
+    console.log("Raw Api results" + allFiles);
+
+    const offices = result.data;
+
+    console.log("Files: " + JSON.stringify(allFiles));
+
     renderPage();
 }
 
@@ -50,4 +61,4 @@ function renameFile(id) {
     }
 }
 
-fetchFiles(); // Call this on page load
+fetchFiles();
