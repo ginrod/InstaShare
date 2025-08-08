@@ -6,12 +6,12 @@
     ViewData["Title"] = "Files";
 }
 
-<div class="container text-center mt-5">
+<div class="container mt-5" style="max-width: 900px">
     <h2>Search files</h2>
 
     <div class="row g-2 mb-3 align-items-center">
         <div class="col-sm-8">
-            <input type="text" id="searchContactsInput"
+            <input type="text" id="searchFilesInput"
                    class="form-control form-control-lg"
                    placeholder="Start typing to find files..."
                    data-api="@ApiSettings.BaseUrl"
@@ -19,7 +19,7 @@
         </div>
         <div class="col-sm-4">
             <div class="d-flex gap-2">
-                <button class="btn btn-primary btn-lg flex-fill" onclick="searchContacts()">Search</button>
+                <button class="btn btn-primary btn-lg flex-fill" onclick="searchFiles()">Search</button>
                 <button class="btn btn-secondary btn-lg flex-fill" onclick="findAllFiles()">Find All</button>
             </div>
         </div>
@@ -29,7 +29,7 @@
 
     <div class="container">
         <div class="row justify-content-center">
-            <div id="results" class="col-12"></div>
+            <div id="filesContainer" class="col-12"></div>
         </div>
     </div>
 
@@ -39,6 +39,7 @@
 
         <p class="mt-2">Page: <span id="pageIndicator"></span> of <span id="totalPages"></span></p>
     </div>
+
 </div>
 
 <script src="~/js/files.js"></script>

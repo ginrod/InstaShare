@@ -28,7 +28,7 @@ namespace InstaShare.API.Controllers
         /// <returns>A list of Files</returns>
         /// <response code="200">Files retrieved successfully.</response>
         /// <response code="500">If an internal server error occurs.</response>
-        [HttpGet("getFiles")]
+        [HttpGet("getAllFiles")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<FileEntity>>), 200)]
         [ProducesResponseType(typeof(ApiResponse<object>), 400)]
         [ProducesResponseType(typeof(ApiResponse<object>), 500)]
@@ -53,7 +53,7 @@ namespace InstaShare.API.Controllers
         /// <response code="200">Files retrieved successfully.</response>
         /// <response code="400">If the search term is empty or invalid.</response>
         /// <response code="500">If an internal server error occurs.</response>
-        [HttpGet("getFiles")]
+        [HttpGet("searchFiles")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<FileEntity>>), 200)]
         [ProducesResponseType(typeof(ApiResponse<object>), 400)]
         [ProducesResponseType(typeof(ApiResponse<object>), 500)]
