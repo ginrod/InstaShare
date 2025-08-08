@@ -60,17 +60,17 @@ namespace InstaShare.API.Controllers
         [Produces("application/json")]
         [MapToApiVersion("1.0")]
         [HttpGet(Name = "FilesController")]
-        public async Task<IActionResult> GetFiles([FromQuery] string term, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> SearchFiles([FromQuery] string term, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             if (string.IsNullOrWhiteSpace(term))
             {
                 return BadRequest(new ApiResponse<object>(false, "Search term cannot be empty.", null));
             }
 
-            var files = await _fileService.GetAllFilesAsync();
+            var (files, totalRecords) = await _fileService.SearchFilesAsync(term, page, pageSize);
 
             return Ok(new ApiResponse<IEnumerable<FileEntity>>
-                (success: true, "Files retrieved successfully", files, files.Count())
+                (success: true, "Files retrieved successfully", files, totalRecords)
             );
         }
     }
