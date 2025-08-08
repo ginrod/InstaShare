@@ -24,6 +24,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<IFilesRepository, FilesRepository>();
+builder.Services.AddScoped<IFileService, FileService>();
 
 builder.Services.AddDbContext<FilesDataContext>(options =>
     options.UseInMemoryDatabase("InMemoryDatabase"));

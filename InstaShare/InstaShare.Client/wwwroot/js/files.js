@@ -1,9 +1,12 @@
 ﻿let allFiles = [];
-let currentPage = 1;
+let page = 1;
 const pageSize = 5;
 
 async function fetchFiles() {
-    const apiResult = await fetch(`${baseUrl}/api/v1/Files/getFiles`);
+    const filesContainer = document.getElementById("filesContainer");
+    const baseUrl = filesContainer.dataset.api;
+
+    const apiResult = await fetch(`${baseUrl}/api/v1/Files/getFiles?page=${page}`);
 
     if (!apiResult.ok)
         throw new Error("Failed to fetch offices");
@@ -20,7 +23,7 @@ async function fetchFiles() {
 }
 
 function renderPage() {
-    const start = (currentPage - 1) * pageSize;
+    const start = (page - 1) * pageSize;
     const end = start + pageSize;
     const files = allFiles.slice(start, end);
 
@@ -38,19 +41,19 @@ function renderPage() {
     document.getElementById('pageIndicator').textContent = `Page ${currentPage}`;
 }
 
-document.getElementById('prevBtn').addEventListener('click', () => {
-    if (currentPage > 1) {
-        currentPage--;
-        renderPage();
+function nextPage() {
+    if (page < totalPages) {
+        ++page;
+        fetchFiles();
     }
-});
+}
 
-document.getElementById('nextBtn').addEventListener('click', () => {
-    if (currentPage * pageSize < allFiles.length) {
-        currentPage++;
-        renderPage();
+function previousPage() {
+    if (page > 1) {
+        --page;
+        fetchFiles();
     }
-});
+}
 
 function renameFile(id) {
     const newName = prompt("Enter new name:");
