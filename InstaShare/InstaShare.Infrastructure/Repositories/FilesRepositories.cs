@@ -18,6 +18,18 @@ namespace InstaShare.Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task<(IEnumerable<FileEntity>, int)> SearchAllFilesAsync(int page, int pageSize)
+        {
+            var totalRecords = await _dbSet.CountAsync();
+
+            var Files = await _dbSet
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (Files, totalRecords);
+        }
+
         public async Task<(IEnumerable<FileEntity>, int)> SearchFilesAsync(string searchTerm, int page, int pageSize)
         {
             var query = _dbSet

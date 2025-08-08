@@ -28,9 +28,9 @@ namespace InstaShare.Application.Services
             await _filesRepository.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<FileEntity>> GetAllFilesAsync()
+        public async Task<(IEnumerable<FileEntity>, int)> SearchAllFilesAsync(int page, int pageSize)
         {
-            return await _filesRepository.GetAllAsync();
+            return await _filesRepository.SearchAllFilesAsync(page, pageSize);
         }
 
         public async Task<FileEntity> GetFileByIdAsync(Guid id)

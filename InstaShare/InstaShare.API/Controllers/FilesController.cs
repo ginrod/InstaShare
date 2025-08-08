@@ -37,10 +37,10 @@ namespace InstaShare.API.Controllers
         [HttpGet(Name = "FilesController")]
         public async Task<IActionResult> GetFiles([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var files = await _fileService.GetAllFilesAsync();
+            var (files, totalRecords) = await _fileService.SearchAllFilesAsync(page, pageSize);
 
             return Ok(new ApiResponse<IEnumerable<FileEntity>>
-                (success: true, "Files retrieved successfully", files, files.Count())
+                (success: true, "Files retrieved successfully", files, totalRecords)
             );
         }
 

@@ -84,7 +84,7 @@ using (var serviceScope = app.Services.CreateScope())
     {
         Id = new Guid("ff0c022e-1aff-4ad8-2231-08db0378ac98"),
         Name = "Default File",
-        Status = "uploaded",
+        Status = "upload",
         Size = 1024
     });
 
