@@ -15,8 +15,6 @@ async function fetchFiles() {
 
     console.log("Raw Api results" + allFiles);
 
-    const offices = result.data;
-
     console.log("Files: " + JSON.stringify(allFiles));
 
     renderPage();

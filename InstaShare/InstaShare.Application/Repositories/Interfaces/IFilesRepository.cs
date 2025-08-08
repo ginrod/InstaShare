@@ -9,6 +9,6 @@ namespace InstaShare.Application.Repositories.Interfaces
 {
     public interface IFilesRepository : IEntitiesRepository<FileEntity, Guid>
     {
-
+        Task<(IEnumerable<FileEntity>, int)> SearchFilesAsync(string searchTerm, int page, int pageSize);
     }
 }

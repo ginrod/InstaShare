@@ -14,5 +14,7 @@ namespace InstaShare.Application.Services.Interfaces
         Task AddFileAsync(FileEntity contact);
         Task UpdateFileAsync(FileEntity contact);
         Task DeleteFileAsync(Guid id);
+        Task<(IEnumerable<FileEntity>, int)> SearchFilesAsync(string searchTerm, int page, int pageSize);
+
     }
 }

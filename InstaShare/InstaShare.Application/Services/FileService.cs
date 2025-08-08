@@ -38,6 +38,11 @@ namespace InstaShare.Application.Services
             return await _filesRepository.GetByIdAsync(id);
         }
 
+        public async Task<(IEnumerable<FileEntity>, int)> SearchFilesAsync(string searchTerm, int page, int pageSize)
+        {
+            return await _filesRepository.SearchFilesAsync(searchTerm, page, pageSize);
+        }
+
         public async Task UpdateFileAsync(FileEntity file)
         {
             await _filesRepository.UpdateAsync(file);

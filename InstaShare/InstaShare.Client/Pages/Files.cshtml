@@ -7,9 +7,29 @@
 }
 
 <div class="container text-center mt-5">
+    <h2>Search files</h2>
+
+    <div class="row g-2 mb-3 align-items-center">
+        <div class="col-sm-8">
+            <input type="text" id="searchContactsInput"
+                   class="form-control form-control-lg"
+                   placeholder="Start typing to find files..."
+                   data-api="@ApiSettings.BaseUrl"
+                   />
+        </div>
+        <div class="col-sm-4">
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary btn-lg flex-fill" onclick="searchContacts()">Search</button>
+                <button class="btn btn-secondary btn-lg flex-fill" onclick="findAllFiles()">Find All</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="errorMessage" style="color: red; margin-top: 1em;"></div>
+
     <div class="container">
         <div class="row justify-content-center">
-            <div id="filesContainer" class="col-12" data-api="@ApiSettings.BaseUrl"></div>
+            <div id="results" class="col-12"></div>
         </div>
     </div>
 
