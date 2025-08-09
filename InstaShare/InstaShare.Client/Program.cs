@@ -32,7 +32,7 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
-// Redirect to Offices selection page
+// Redirect to Files page
 app.Map("/", context =>
 {
     context.Response.Redirect("/Files");
