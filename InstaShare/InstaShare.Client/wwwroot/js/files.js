@@ -1,11 +1,25 @@
 ﻿let allFiles = [];
 let page = 1;
 const pageSize = 5;
+let totalPages = 1;
 
-async function searchFiles() {
+async function searchFiles(page) {
+
     const searchFilesInput = document.getElementById("searchFilesInput");
     const baseUrl = searchFilesInput.dataset.api;
     const term = searchFilesInput.value;
+
+    if (term) {
+        await searchByTermFiles(baseUrl, term, page);
+    }
+    else
+    {
+        await searchAllFiles(page);
+    }
+}
+
+async function searchByTermFiles(baseUrl, term, page) {
+    page = page || 1;
 
     const apiResult = await fetch(`${baseUrl}/api/v1/Files/searchFiles?term=${term}&page=${page}`);
 
@@ -13,18 +27,21 @@ async function searchFiles() {
         throw new Error("Failed to fetch files");
 
     const jsonResult = await apiResult.json();
-    allFiles = jsonResult.data
+    const files = jsonResult.data
+    totalPages = Math.ceil(jsonResult.totalRecords / pageSize);
 
-    console.log("Raw Api results" + allFiles);
+    console.log("Raw Api results" + files);
 
-    console.log("Files: " + JSON.stringify(allFiles));
+    console.log("Files: " + JSON.stringify(files));
 
-    renderPage();
+    renderPage(files, totalPages);
 }
 
-async function findAllFiles() {
+async function searchAllFiles(page) {
+    page = page || 1;
+
     const searchFilesInput = document.getElementById("searchFilesInput");
-    const baseUrl = searchFilesInput.dataset.api;
+    baseUrl = searchFilesInput.dataset.api;
 
     const apiResult = await fetch(`${baseUrl}/api/v1/Files/getAllFiles?page=${page}`);
 
@@ -32,26 +49,24 @@ async function findAllFiles() {
         throw new Error("Failed to fetch files");
 
     const jsonResult = await apiResult.json();
-    allFiles = jsonResult.data
+    const files = jsonResult.data
+    totalPages = Math.ceil(jsonResult.totalRecords / pageSize);
 
-    console.log("Raw Api results" + allFiles);
+    console.log("Raw Api results" + files);
+    console.log("JsonResult.totalRecord=" + jsonResult.totalRecords);
 
-    console.log("Files: " + JSON.stringify(allFiles));
+    console.log("Files: " + JSON.stringify(files));
 
-    renderPage();
+    renderPage(files, totalPages);
 }
 
-function renderPage() {
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    const files = allFiles.slice(start, end);
-
-    // Pagination buttons
-    document.getElementById('prevBtn').disabled = page  === 1;
-    document.getElementById('nextBtn').disabled = end >= allFiles.length;
-    document.getElementById('pageIndicator').textContent = `Page ${page}`;
+function renderPage(files, totalPages) {
 
     renderTable(files);
+
+    document.getElementById("paginationControls").style.display = "block";
+    document.getElementById("pageIndicator").textContent = page;
+    document.getElementById("totalPages").textContent = totalPages;
 }
 
 function renderTable(files) {
@@ -106,13 +121,13 @@ function renderTable(files) {
 function nextPage() {
     if (page < totalPages) {
         ++page;
-        searchContacts();
+        searchFiles(page);
     }
 }
 
 function previousPage() {
     if (page > 1) {
         --page;
-        searchContacts();
+        searchFiles(page);
     }
 }
