@@ -21,11 +21,9 @@ async function searchFiles(page) {
 async function searchByTermFiles(baseUrl, term, page) {
     page = page || 1;
 
-    const token = "@Model.AccessToken"
+    const token = window.appConfig.accessToken;
 
-    const headers = new Headers({
-        "Authorization": `Bearer ${token}`
-    });
+    console.log("Token: " + token)
 
     const apiResult = await fetch(`${baseUrl}/api/v1/Files/searchFiles?term=${encodeURIComponent(term)}&page=${page}`, {
         headers: {
@@ -54,7 +52,16 @@ async function searchAllFiles(page) {
     const searchFilesInput = document.getElementById("searchFilesInput");
     baseUrl = searchFilesInput.dataset.api;
 
-    const apiResult = await fetch(`${baseUrl}/api/v1/Files/getAllFiles?page=${page}`);
+    const token = window.appConfig.accessToken;
+
+    console.log("Token: " + token)
+
+    const apiResult = await fetch(`${baseUrl}/api/v1/Files/getAllFiles?page=${page}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/json"
+        }
+    });
 
     if (!apiResult.ok)
         throw new Error("Failed to fetch files");

@@ -48,7 +48,8 @@ builder.Services.AddCors(o => o.AddPolicy("default", builder =>
 {
     builder.AllowAnyOrigin()
            .AllowAnyMethod()
-           .AllowAnyHeader();
+           .AllowAnyHeader()
+           .WithHeaders("Authorization", "Content-Type", "Accept");
 }));
 
 builder.Services.AddScoped<IFilesRepository, FilesRepository>();
