@@ -1,5 +1,7 @@
 ﻿@page
 
+@model InstaShare.Client.Pages.FilesModel
+
 @inject Configuration.ApiSettings ApiSettings
 
 @{
@@ -41,5 +43,11 @@
     </div>
 
 </div>
+
+<script>
+    window.appConfig = {
+      accessToken: '@Model.AccessToken'
+    };
+</script>
 
 <script src="~/js/files.js"></script>

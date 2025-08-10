@@ -2,11 +2,14 @@
 using InstaShare.Application.Dtos;
 using InstaShare.Application.Entities;
 using InstaShare.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using System.Xml.Linq;
 
 namespace InstaShare.API.Controllers
 {
+    [Authorize]
     [Route("api/v{version:apiVersion}/Files")]
     [ApiExplorerSettings(GroupName = "Files")]
     [ApiController]

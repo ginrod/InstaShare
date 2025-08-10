@@ -27,7 +27,9 @@ JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 // Sign-in users with the Microsoft identity platform
 builder.Services
     .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration);
+    .AddMicrosoftIdentityWebApp(builder.Configuration)
+    .EnableTokenAcquisitionToCallDownstreamApi()
+    .AddInMemoryTokenCaches();
 
 builder.Services.AddMvc(options =>
 {
