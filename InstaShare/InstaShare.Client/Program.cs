@@ -29,14 +29,6 @@ builder.Services
     .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration);
 
-builder.Services.AddControllersWithViews(options =>
-{
-    var policy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    options.Filters.Add(new AuthorizeFilter(policy));
-}).AddMicrosoftIdentityUI();
-
 builder.Services.AddMvc(options =>
 {
     var policy = new AuthorizationPolicyBuilder()
