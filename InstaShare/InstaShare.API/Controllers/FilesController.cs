@@ -6,6 +6,7 @@ using InstaShare.Application.Services.Interfaces;
 using InstaShare.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web.Resource;
 using System.Security.Cryptography;
 using System.Xml.Linq;
@@ -127,6 +128,32 @@ namespace InstaShare.API.Controllers
             await _queue.EnqueueAsync(new ZipJob(rec.Id), ct);
 
             return Accepted(new { id = rec.Id });
+        }
+
+        [HttpPatch("{id:guid}/name")]
+        public async Task<IActionResult> Rename(Guid id, [FromBody] string newName, CancellationToken ct)
+        {
+            var userId = User.FindFirst("sub")?.Value ?? User.FindFirst("oid")?.Value ?? "unknown";
+            var rec = await _db.Files.FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId, ct);
+            if (rec is null) return NotFound();
+
+            rec.Name = newName;
+            rec.UpdatedTime = DateTime.UtcNow;
+            await _db.SaveChangesAsync(ct);
+            return NoContent();
+        }
+
+        [HttpGet("{id:guid}/download")]
+        public async Task<IActionResult> Download(Guid id, CancellationToken ct)
+        {
+            var userId = User.FindFirst("sub")?.Value ?? User.FindFirst("oid")?.Value ?? "unknown";
+            var rec = await _db.Files.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId, ct);
+            if (rec is null) return NotFound();
+            if (rec.Status != FileStatus.Zipped || string.IsNullOrEmpty(rec.ZipBlob)) return BadRequest("Not ready");
+
+            var parts = rec.ZipBlob.Split('/', 2);
+            var sas = await _blob.GetReadSasUriAsync(parts[0], parts[1], TimeSpan.FromMinutes(10));
+            return Ok(new { url = sas });
         }
     }
 }
