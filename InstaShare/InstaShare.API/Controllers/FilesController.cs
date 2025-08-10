@@ -38,7 +38,6 @@ namespace InstaShare.API.Controllers
         [Produces("application/json")]
         [MapToApiVersion("1.0")]
         [HttpGet(Name = "FilesController")]
-        [RequiredScope(RequiredScopesConfigurationKey = "AzureAD:Scopes:Write")]
         public async Task<IActionResult> GetFiles([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             var (files, totalRecords) = await _fileService.SearchAllFilesAsync(page, pageSize);
@@ -64,7 +63,6 @@ namespace InstaShare.API.Controllers
         [Produces("application/json")]
         [MapToApiVersion("1.0")]
         [HttpGet(Name = "FilesController")]
-        [RequiredScope(RequiredScopesConfigurationKey = "AzureAD:Scopes:Write")]
         public async Task<IActionResult> SearchFiles([FromQuery] string term, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             if (string.IsNullOrWhiteSpace(term))
