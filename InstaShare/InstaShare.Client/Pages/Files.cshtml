@@ -8,6 +8,18 @@
     ViewData["Title"] = "Files";
 }
 
+<h2 class="text-xl font-semibold mb-4">Upload files</h2>
+
+<div class="space-y-4">
+    <div>
+        <input id="fileInput" type="file" multiple class="border p-2 rounded" />
+        <button id="uploadBtn" class="ml-2 px-4 py-2 rounded bg-blue-600 text-white">Upload</button>
+        <span id="uploadStatus" class="ml-3 text-sm"></span>
+    </div>
+
+    <div id="filesContainer" class="border rounded p-2"></div>
+</div>
+
 <div class="container mt-5" style="max-width: 900px">
     <h2>Search files</h2>
 
