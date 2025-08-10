@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InstaShare.Infrastructure;
 
-public interface IFilesDataContext
+public interface IAppDbContext
 {
     DbSet<FileEntity> Files { get; set; }
 

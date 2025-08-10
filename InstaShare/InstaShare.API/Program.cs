@@ -57,7 +57,7 @@ builder.Services.AddScoped<IFileService, FileService>();
 
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddDbContext<FilesDataContext>(options =>
+    builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb"))
               .EnableSensitiveDataLogging()
               .LogTo(Console.WriteLine, LogLevel.Information));

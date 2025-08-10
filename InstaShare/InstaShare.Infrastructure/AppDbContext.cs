@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InstaShare.Infrastructure;
 
-public class FilesDataContext : DbContext, IFilesDataContext
+public class AppDbContext : DbContext, IAppDbContext
 {
-    public FilesDataContext()
+    public AppDbContext()
     {
     }
 
-    public FilesDataContext(DbContextOptions options) : base(options)
+    public AppDbContext(DbContextOptions options) : base(options)
     {
     }
 
