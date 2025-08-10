@@ -44,17 +44,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 //};
             }, options => { builder.Configuration.Bind("AzureAd", options); });
 
-builder.Services.AddCors(options =>
+builder.Services.AddCors(o => o.AddPolicy("default", builder =>
 {
-    options.AddDefaultPolicy(
-        policy =>
-        {
-            policy
-                .WithOrigins(builder.Configuration.GetSection("AllowedHosts").Get<string>()!)
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-});
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));
 
 builder.Services.AddScoped<IFilesRepository, FilesRepository>();
 builder.Services.AddScoped<IFileService, FileService>();
@@ -131,9 +126,12 @@ using (var serviceScope = app.Services.CreateScope())
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseCors();
-
+app.UseCors("default");
 app.UseHttpsRedirection();
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseResponseCompression();
 
