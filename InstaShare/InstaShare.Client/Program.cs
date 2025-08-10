@@ -1,5 +1,11 @@
 using InstaShare.Client.Configuration;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Options;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +18,24 @@ builder.Services.Configure<ApiSettings>(
 builder.Services.AddSingleton(resolver =>
     resolver.GetRequiredService<IOptions<ApiSettings>>().Value);
 
+// This is required to be instantiated before the OpenIdConnectOptions starts getting configured.
+// By default, the claims mapping will map claim names in the old format to accommodate older SAML applications.
+// For instance, 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role' instead of 'roles' claim.
+// This flag ensures that the ClaimsIdentity claims collection will be built from the claims in the token
+JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
+// Sign-in users with the Microsoft identity platform
+builder.Services
+    .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApp(builder.Configuration);
+
+builder.Services.AddMvc(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+}).AddMicrosoftIdentityUI();
 
 var app = builder.Build();
 
@@ -27,7 +51,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthorization();
 app.UseAuthorization();
 
 app.MapRazorPages();
@@ -38,5 +62,7 @@ app.Map("/", context =>
     context.Response.Redirect("/Files");
     return Task.CompletedTask;
 });
+
+app.MapControllers();
 
 app.Run();
