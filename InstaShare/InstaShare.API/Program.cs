@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using InstaShare.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
+using Azure.Storage.Blobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +53,9 @@ builder.Services.AddCors(o => o.AddPolicy("default", builder =>
            .WithHeaders("Authorization", "Content-Type", "Accept");
 }));
 
+builder.Services.AddSingleton(new BlobServiceClient(builder.Configuration["Storage:ConnectionString"]));
+
+builder.Services.AddScoped<IBlobStorage, AzureBlobStorage>();
 builder.Services.AddScoped<IFilesRepository, FilesRepository>();
 builder.Services.AddScoped<IFileService, FileService>();
 
