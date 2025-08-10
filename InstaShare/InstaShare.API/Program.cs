@@ -11,6 +11,7 @@ using InstaShare.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Azure.Storage.Blobs;
+using InstaShare.API.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
