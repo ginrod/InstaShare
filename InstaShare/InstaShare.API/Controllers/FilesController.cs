@@ -1,10 +1,14 @@
 ﻿using Asp.Versioning;
+using InstaShare.API.Services.Interfaces;
 using InstaShare.Application.Dtos;
 using InstaShare.Application.Entities;
 using InstaShare.Application.Services.Interfaces;
+using InstaShare.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web.Resource;
+using System.Security.Cryptography;
 using System.Xml.Linq;
 
 namespace InstaShare.API.Controllers
@@ -17,10 +21,16 @@ namespace InstaShare.API.Controllers
     public class FilesController : ControllerBase
     {
         private readonly IFileService _fileService;
+        private readonly IBlobStorage _blob;
+        private readonly IZipQueue _queue;
+        private readonly AppDbContext _db;
 
-        public FilesController(IFileService fileService)
+        public FilesController(IFileService fileService, AppDbContext db, IBlobStorage blob, IZipQueue queue)
         {
             _fileService = fileService;
+            _db = db;
+            _blob = blob;
+            _queue = queue;
         }
 
         /// <summary>
@@ -75,6 +85,75 @@ namespace InstaShare.API.Controllers
             return Ok(new ApiResponse<IEnumerable<FileEntity>>
                 (success: true, "Files retrieved successfully", files, totalRecords)
             );
+        }
+
+        [HttpPost] // multipart
+        [RequestSizeLimit(1024L * 1024L * 200)] // 200 MB ex.
+        public async Task<IActionResult> Upload([FromForm] IFormFile file, CancellationToken ct)
+        {
+            if (file is null || file.Length == 0) return BadRequest("Empty file");
+
+            // calculate SHA256
+            string hashHex;
+            await using (var s = file.OpenReadStream())
+            {
+                using var sha = SHA256.Create();
+                var h = await sha.ComputeHashAsync(s, ct);
+                hashHex = Convert.ToHexString(h).ToLowerInvariant();
+            }
+
+            var userId = User.FindFirst("sub")?.Value ?? User.FindFirst("oid")?.Value ?? "unknown";
+            var id = Guid.NewGuid();
+            var blobName = $"{userId}/{id}-{Path.GetFileName(file.FileName)}";
+
+            // upload to blob
+            await using var stream = file.OpenReadStream();
+            await _blob.UploadAsync("original", blobName, stream, file.ContentType, ct);
+
+            var rec = new FileEntity
+            {
+                Id = id,
+                UserId = userId,
+                Name = file.FileName,
+                ContentType = file.ContentType ?? "application/octet-stream",
+                SizeBytes = file.Length,
+                HashSha256 = hashHex,
+                OriginalBlob = $"original/{blobName}",
+                Status = FileStatus.Uploaded
+            };
+
+            _db.Files.Add(rec);
+            await _db.SaveChangesAsync(ct);
+
+            await _queue.EnqueueAsync(new ZipJob(rec.Id), ct);
+
+            return Accepted(new { id = rec.Id });
+        }
+
+        [HttpPatch("{id:guid}/name")]
+        public async Task<IActionResult> Rename(Guid id, [FromBody] string newName, CancellationToken ct)
+        {
+            var userId = User.FindFirst("sub")?.Value ?? User.FindFirst("oid")?.Value ?? "unknown";
+            var rec = await _db.Files.FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId, ct);
+            if (rec is null) return NotFound();
+
+            rec.Name = newName;
+            rec.UpdatedTime = DateTime.UtcNow;
+            await _db.SaveChangesAsync(ct);
+            return NoContent();
+        }
+
+        [HttpGet("{id:guid}/download")]
+        public async Task<IActionResult> Download(Guid id, CancellationToken ct)
+        {
+            var userId = User.FindFirst("sub")?.Value ?? User.FindFirst("oid")?.Value ?? "unknown";
+            var rec = await _db.Files.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId, ct);
+            if (rec is null) return NotFound();
+            if (rec.Status != FileStatus.Zipped || string.IsNullOrEmpty(rec.ZipBlob)) return BadRequest("Not ready");
+
+            var parts = rec.ZipBlob.Split('/', 2);
+            var sas = await _blob.GetReadSasUriAsync(parts[0], parts[1], TimeSpan.FromMinutes(10));
+            return Ok(new { url = sas });
         }
     }
 }

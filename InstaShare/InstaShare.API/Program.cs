@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using InstaShare.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
+using Azure.Storage.Blobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,11 +53,26 @@ builder.Services.AddCors(o => o.AddPolicy("default", builder =>
            .WithHeaders("Authorization", "Content-Type", "Accept");
 }));
 
+builder.Services.AddSingleton(new BlobServiceClient(builder.Configuration["Storage:ConnectionString"]));
+
+builder.Services.AddScoped<IBlobStorage, AzureBlobStorage>();
 builder.Services.AddScoped<IFilesRepository, FilesRepository>();
 builder.Services.AddScoped<IFileService, FileService>();
 
-builder.Services.AddDbContext<FilesDataContext>(options =>
-    options.UseInMemoryDatabase("InMemoryDatabase"));
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb"))
+              .EnableSensitiveDataLogging()
+              .LogTo(Console.WriteLine, LogLevel.Information));
+}
+else
+{
+    // Uncomment and configure for production database
+    // builder.Services.AddDbContext<FilesDataContext>(options =>
+    //     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
+
 
 builder.Services.AddResponseCompression(options => { options.EnableForHttps = true; });
 
@@ -103,25 +119,25 @@ builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
-using (var serviceScope = app.Services.CreateScope())
-{
-    var dbContext = serviceScope.ServiceProvider.GetRequiredService<FilesDataContext>();
+//using (var serviceScope = app.Services.CreateScope())
+//{
+//    var dbContext = serviceScope.ServiceProvider.GetRequiredService<FilesDataContext>();
 
-    // In real world do a proper migration, but here's the test data
+    //// In real world do a proper migration, but here's the test data
 
-    dbContext.Files.Add(new FileEntity
-    {
-        Id = new Guid("ff0c022e-1aff-4ad8-2231-08db0378ac98"),
-        Name = "Default File",
-        Status = "upload",
-        Size = 1024
-    });
+    //dbContext.Files.Add(new FileEntity
+    //{
+    //    Id = new Guid("ff0c022e-1aff-4ad8-2231-08db0378ac98"),
+    //    Name = "Default File",
+    //    Status = "upload",
+    //    Size = 1024
+    //});
 
     // Add more sample data
-    dbContext.SeedInitialData();
+    //dbContext.SeedInitialData();
 
-    dbContext.SaveChanges();
-}
+    //dbContext.SaveChanges();
+//}
 
 
 app.UseSwagger();

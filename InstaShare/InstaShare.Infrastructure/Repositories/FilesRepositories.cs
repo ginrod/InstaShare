@@ -11,9 +11,9 @@ namespace InstaShare.Infrastructure.Repositories
 {
     public class FilesRepository : EntityRepository<FileEntity, Guid>, IFilesRepository
     {
-        private readonly FilesDataContext _context;
+        private readonly AppDbContext _context;
 
-        public FilesRepository(FilesDataContext context) : base(context)
+        public FilesRepository(AppDbContext context) : base(context)
         {
             _context = context;
         }
