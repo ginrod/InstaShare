@@ -13,7 +13,7 @@
 <div class="space-y-4">
     <div>
         <input id="fileInput" type="file" multiple class="border p-2 rounded" />
-        <button id="uploadBtn" class="ml-2 px-4 py-2 rounded bg-blue-600 text-white">Upload</button>
+        <button id="uploadBtn" class="ml-2 px-4 py-2 rounded bg-blue-600 text-white" onclick="uploadFile()">Upload</button>
         <span id="uploadStatus" class="ml-3 text-sm"></span>
     </div>
 
@@ -28,7 +28,6 @@
             <input type="text" id="searchFilesInput"
                    class="form-control form-control-lg"
                    placeholder="Start typing to find files..."
-                   data-api="@ApiSettings.BaseUrl"
                    />
         </div>
         <div class="col-sm-4">
@@ -58,7 +57,8 @@
 
 <script>
     window.appConfig = {
-      accessToken: '@Model.AccessToken'
+      accessToken: '@Model.AccessToken',
+      baseUrl: '@ApiSettings.BaseUrl'
     };
 </script>
 

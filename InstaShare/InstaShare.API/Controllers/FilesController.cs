@@ -87,7 +87,7 @@ namespace InstaShare.API.Controllers
             );
         }
 
-        [HttpPost] // multipart
+        [HttpPost("uploadFile")] // multipart
         [RequestSizeLimit(1024L * 1024L * 200)] // 200 MB ex.
         public async Task<IActionResult> Upload([FromForm] IFormFile file, CancellationToken ct)
         {

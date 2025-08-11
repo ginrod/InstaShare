@@ -3,14 +3,33 @@ let page = 1;
 const pageSize = 5;
 let totalPages = 1;
 
+async function uploadFile(term, page) {
+    page = page || 1;
+
+    const baseUrl = window.appConfig.baseUrl;
+    const token = window.appConfig.accessToken;
+
+    console.log("Token: " + token)
+
+    const apiResult = await fetch(`${baseUrl}/api/v1/Files/uploadFile`, {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/json"
+        }
+    });
+
+    if (!apiResult.ok)
+        throw new Error("Failed to upload file");
+}
+
 async function searchFiles(page) {
 
     const searchFilesInput = document.getElementById("searchFilesInput");
-    const baseUrl = searchFilesInput.dataset.api;
+
     const term = searchFilesInput.value;
 
     if (term) {
-        await searchByTermFiles(baseUrl, term, page);
+        await searchByTermFiles(term, page);
     }
     else
     {
@@ -18,9 +37,10 @@ async function searchFiles(page) {
     }
 }
 
-async function searchByTermFiles(baseUrl, term, page) {
+async function searchByTermFiles(term, page) {
     page = page || 1;
 
+    const baseUrl = window.appConfig.baseUrl;
     const token = window.appConfig.accessToken;
 
     console.log("Token: " + token)
@@ -49,9 +69,7 @@ async function searchByTermFiles(baseUrl, term, page) {
 async function searchAllFiles(page) {
     page = page || 1;
 
-    const searchFilesInput = document.getElementById("searchFilesInput");
-    baseUrl = searchFilesInput.dataset.api;
-
+    const baseUrl = window.appConfig.baseUrl;
     const token = window.appConfig.accessToken;
 
     console.log("Token: " + token)
